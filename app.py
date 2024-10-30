@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 
 # Load API keys from environment variables
 openai.api_key = os.getenv("OPENAI_API_KEY")
-NEWS_API_KEY = os.getenv("NEWS_API_KEY")  # Set these in your environment variables
+NEWS_API_KEY = os.getenv("NEWS_API_KEY") 
 
 # Initialize News API Client
 newsapi = NewsApiClient(api_key=NEWS_API_KEY)
