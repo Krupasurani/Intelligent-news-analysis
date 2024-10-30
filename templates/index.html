@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Article Analyzer</title>
+    <style>
+        body {
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* White text */
+            font-family: Arial, sans-serif; /* Font style */
+            margin: 0; /* Remove default margin */
+            padding: 20px; /* Padding for the body */
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center; /* Center content horizontally */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        h1 {
+            font-size: 2.5em; /* Large title */
+            color: #ffcc00; /* Golden color for the title */
+            margin-bottom: 20px; /* Spacing below title */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the form */
+            margin-bottom: 30px; /* Spacing below form */
+            background-color: #1e1e1e; /* Darker background for form */
+            padding: 20px; /* Padding for form */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow for form */
+            width: 100%; /* Full width */
+            max-width: 500px; /* Maximum width for form */
+        }
+
+        input[type="text"],
+        input[type="date"],
+        button {
+            width: 100%; /* Full width */
+            padding: 10px; /* Padding for inputs and button */
+            margin: 10px 0; /* Margin around inputs and button */
+            border-radius: 5px; /* Rounded corners */
+            border: 1px solid #ccc; /* Border for inputs */
+            font-size: 1em; /* Font size */
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus {
+            outline: none; /* Remove default outline */
+            border: 1px solid #ffcc00; /* Highlight border on focus */
+        }
+
+        button {
+            background-color: #ffcc00; /* Button color */
+            color: #121212; /* Button text color */
+            border: none; /* Remove border */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s; /* Transition effect */
+        }
+
+        button:hover {
+            background-color: #e6b800; /* Darker button on hover */
+        }
+
+        .results {
+            max-width: 800px; /* Max width for results */
+            width: 100%; /* Full width */
+            margin: 20px 0; /* Margin around results */
+            padding: 20px; /* Padding around results */
+            background-color: #1e1e1e; /* Dark background for results */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow for results */
+            overflow-y: auto; /* Enable vertical scrolling for results */
+            max-height: 70vh; /* Maximum height for results */
+        }
+
+        h2 {
+            font-size: 1.8em; /* Size for article title */
+            color: #ffcc00; /* Golden color for article titles */
+            margin-bottom: 10px; /* Spacing below article title */
+        }
+
+        .article-date-source {
+            font-size: 0.9em; /* Smaller size for date and source */
+            color: #cccccc; /* Light grey for date and source */
+            margin-bottom: 10px; /* Spacing below date and source */
+        }
+
+        .summary, .key-points, .sentiment, .topic {
+            font-size: 1em; /* Regular size for content */
+            margin-bottom: 10px; /* Spacing below each content section */
+        }
+
+        strong {
+            color: #ffcc00; /* Golden color for bold text */
+        }
+
+        hr {
+            border: 1px solid #444; /* Line between articles */
+            margin: 20px 0; /* Spacing for line */
+        }
+
+        a {
+            color: #ffcc00; /* Color for links */
+            text-decoration: none; /* Remove underline */
+        }
+
+        a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        .next-batch {
+            margin-top: 20px; /* Space above next batch button */
+        }
+    </style>
+</head>
+<body>
+    <h1>News Article Analyzer</h1>
+    <form method="POST" action="/">
+        <input type="text" name="search_query" placeholder="Search Query" required>
+        <input type="date" name="from_date" required>
+        <input type="date" name="to_date" required>
+        <button type="submit">Fetch Articles</button>
+    </form>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <div class="results">
+        {% for result in results %}
+            <h2>{{ result.title }}</h2>
+            <p class="article-date-source"><strong>Date:</strong> {{ result.date }} | <strong>Source:</strong> {{ result.source }}</p>
+            <p class="summary"><strong>Summary:</strong> {{ result.summary }}</p>
+            <p class="key-points"><strong>Key Points:</strong> {{ result.key_points }}</p>
+            <p class="sentiment"><strong>Sentiment:</strong> {{ result.sentiment }}</p>
+            <p class="topic"><strong>Topic:</strong> {{ result.topic }}</p>
+            <p><a href="{{ result.url }}">Read more</a></p>
+            <hr>
+        {% endfor %}
+    </div>
+
+    {% if has_next_batch %}
+        <div class="next-batch">
+            <form method="POST" action="/next_batch">
+                <button type="submit">Fetch Next Batch</button>
+            </form>
+        </div>
+    {% endif %}
+</body>
+</html>
